@@ -1,0 +1,13 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://btd535m5lfyn6"]
+
+[resource]
+blend_mode = 1
+no_depth_test = true
+shading_mode = 2
+diffuse_mode = 1
+specular_mode = 2
+vertex_color_use_as_albedo = true
+albedo_color = Color(64, 64, 64, 1)
+emission = Color(16, 16, 16, 1)
+texture_filter = 0
+disable_receive_shadows = true

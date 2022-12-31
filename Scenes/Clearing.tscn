@@ -1,0 +1,145 @@
+[gd_scene load_steps=17 format=3 uid="uid://ixagq004bei0"]
+
+[ext_resource type="Script" path="res://Meshes/Scenery/Clearing.gd" id="1_b2vrx"]
+[ext_resource type="Texture2D" uid="uid://lhe7nmco0vqd" path="res://Textures/hiptyc_2020_4k.exr" id="1_egwky"]
+[ext_resource type="Material" uid="uid://bct74xf0juhai" path="res://Materials/ClearingGroundMaterial.tres" id="2_gni30"]
+[ext_resource type="Material" uid="uid://befsejlxo2gpl" path="res://Materials/PineTrunkMaterial.tres" id="4_nsr1u"]
+[ext_resource type="Material" uid="uid://ban236h2u3khp" path="res://Materials/PineBranchMaterial.tres" id="5_mlsd3"]
+[ext_resource type="Material" uid="uid://b5qlhrvybtwmj" path="res://Materials/RocketMaterial.tres" id="6_am2em"]
+[ext_resource type="Material" uid="uid://btd535m5lfyn6" path="res://Materials/ExplosionMaterial.tres" id="7_5j2lm"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_5mhua"]
+panorama = ExtResource("1_egwky")
+
+[sub_resource type="Sky" id="Sky_xfrxh"]
+sky_material = SubResource("PanoramaSkyMaterial_5mhua")
+
+[sub_resource type="Environment" id="Environment_nl4vt"]
+background_mode = 2
+sky = SubResource("Sky_xfrxh")
+ambient_light_source = 3
+tonemap_mode = 2
+tonemap_exposure = 0.07
+tonemap_white = 8.0
+glow_enabled = true
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0wgeh"]
+emission_shape = 3
+emission_box_extents = Vector3(20, 0.1, 0.1)
+direction = Vector3(0, 3, 0)
+spread = 46.49
+gravity = Vector3(0, 1, 0)
+initial_velocity_min = 3.0
+initial_velocity_max = 6.0
+color = Color(0.501961, 0.501961, 0.501961, 1)
+sub_emitter_mode = 2
+sub_emitter_amount_at_end = 32
+attractor_interaction_enabled = false
+
+[sub_resource type="BoxMesh" id="BoxMesh_ecu8g"]
+material = ExtResource("6_am2em")
+size = Vector3(0.1, 0.1, 0.1)
+
+[sub_resource type="Curve" id="Curve_qkc8v"]
+_data = [Vector2(0, 1), 0.0, -1.80258, 0, 0, Vector2(1, 0), -5.30909, 1.4, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_wa1bc"]
+curve = SubResource("Curve_qkc8v")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_wqf2o"]
+lifetime_randomness = 0.75
+direction = Vector3(0, 1, 0)
+spread = 113.66
+initial_velocity_min = 2.0
+initial_velocity_max = 10.0
+damping_max = 7.0
+scale_curve = SubResource("CurveTexture_wa1bc")
+hue_variation_max = 1.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_6bsf4"]
+material = ExtResource("7_5j2lm")
+radius = 0.1
+height = 0.2
+radial_segments = 6
+rings = 3
+
+[node name="Clearing" type="Node3D"]
+metadata/_edit_lock_ = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.809017, 0.509037, -0.293893, 0, 0.5, 0.866026, 0.587785, 0.70063, -0.404509, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_nl4vt")
+
+[node name="Scenery" type="Node3D" parent="."]
+metadata/_edit_lock_ = true
+
+[node name="Clearing" type="GeometryInstance3D" parent="Scenery"]
+_import_path = NodePath("")
+unique_name_in_owner = false
+process_mode = 0
+process_priority = 0
+editor_description = ""
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+rotation_edit_mode = 0
+rotation_order = 2
+top_level = false
+visible = true
+visibility_parent = NodePath("")
+layers = 1
+sorting_offset = 0.0
+sorting_use_aabb_center = true
+material_override = null
+material_overlay = null
+transparency = 0.0
+cast_shadow = 1
+extra_cull_margin = 0.0
+custom_aabb = AABB(0, 0, 0, 0, 0, 0)
+lod_bias = 1.0
+ignore_occlusion_culling = false
+gi_mode = 1
+gi_lightmap_scale = 0
+visibility_range_begin = 0.0
+visibility_range_begin_margin = 0.0
+visibility_range_end = 0.0
+visibility_range_end_margin = 0.0
+visibility_range_fade_mode = 0
+script = ExtResource("1_b2vrx")
+width = 100
+groundMaterial = ExtResource("2_gni30")
+trunkMaterial = ExtResource("4_nsr1u")
+branchMaterial = ExtResource("5_mlsd3")
+metadata/_edit_lock_ = true
+
+[node name="Rockets" type="GPUParticles3D" parent="Scenery"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.34343, 0, 0)
+amount = 4
+sub_emitter = NodePath("Explosion")
+lifetime = 2.0
+explosiveness = 0.3
+randomness = 1.0
+process_material = SubResource("ParticleProcessMaterial_0wgeh")
+draw_pass_1 = SubResource("BoxMesh_ecu8g")
+metadata/_edit_lock_ = true
+
+[node name="Explosion" type="GPUParticles3D" parent="Scenery/Rockets"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.34343, 0, 0)
+emitting = false
+amount = 10000
+process_material = SubResource("ParticleProcessMaterial_wqf2o")
+draw_pass_1 = SubResource("SphereMesh_6bsf4")
+metadata/_edit_lock_ = true
+
+[node name="Marker3D" type="Marker3D" parent="."]
+transform = Transform3D(0.995227, 0, -0.0975829, 0, 1, 0, 0.0975829, 0, 0.995227, -10.125, 1.27, 30)
+metadata/_edit_lock_ = true
+
+[node name="Camera3D" type="Camera3D" parent="Marker3D"]
+transform = Transform3D(1, 0, 0, 0, 0.97437, -0.224951, 0, 0.224951, 0.97437, 0, 1.6, 0)
+fov = 55.5
+near = 0.1
+far = 400.0
+metadata/_edit_lock_ = true

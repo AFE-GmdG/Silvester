@@ -1,0 +1,5 @@
+# Godot 4+ specific ignores
+.godot/
+.vscode/
+External/
+Textures/hiptyc_2020_4k.exr
